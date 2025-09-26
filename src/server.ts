@@ -2,6 +2,7 @@ import dotenv from 'dotenv'
 import { Server } from 'http'
 import express from 'express'
 import app from './app'
+import { connectDb } from './app/config/db.config'
 const port = process.env.PORT || 5000
 let server: Server
 dotenv.config()
@@ -9,7 +10,7 @@ dotenv.config()
 
 const bootStrap = async () => {
     try {
-
+        await connectDb()
         server = app.listen(port, () => {
             console.log(`Baitul Hikma server is running on port ${port} ✅`)
         })
