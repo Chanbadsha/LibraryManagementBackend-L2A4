@@ -1,11 +1,15 @@
 import express, { NextFunction, Request, Response } from 'express'
 import cors from 'cors'
+import { bookRoutes } from './app/controllers/books.controller'
 const app = express()
 
 // Middleware
 app.use(express.json())
 app.use(cors())
 
+
+// Routing
+app.use("/books", bookRoutes)
 
 // Default Route
 

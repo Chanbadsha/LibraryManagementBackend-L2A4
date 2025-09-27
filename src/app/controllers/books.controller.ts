@@ -1,15 +1,16 @@
 import express, { NextFunction, Request, Response } from 'express'
+import { Book } from '../model/books.model';
 
-const bookRoutes = express.Router()
-
+export const bookRoutes = express.Router()
 
 
 // Get All Books
 bookRoutes.get("/", async (req: Request, res: Response, next: NextFunction) => {
     try {
+        const books = await Book.find()
         res.status(201).json({
             message: "All books fetched successfully",
-            //   data: books,
+            data: books,
         });
     } catch (error) {
         console.error("Error fetching books:", error);
@@ -22,9 +23,15 @@ bookRoutes.get("/", async (req: Request, res: Response, next: NextFunction) => {
 // Get single book by id
 bookRoutes.get("/:bookID", async (req: Request, res: Response, next: NextFunction) => {
     try {
+
+        const bookID = req.params.bookID
+
+        const book = await Book.findById(bookID)
+
+
         res.status(201).json({
             message: "A book fetched successfully",
-            //   data: books,
+            data: book,
         });
     } catch (error) {
         console.error("Error fetching book:", error);
@@ -35,11 +42,13 @@ bookRoutes.get("/:bookID", async (req: Request, res: Response, next: NextFunctio
     }
 })
 // Create a book
-bookRoutes.post("/create/:bookID", async (req: Request, res: Response, next: NextFunction) => {
+bookRoutes.post("/create", async (req: Request, res: Response, next: NextFunction) => {
     try {
+        const bookData = req.body
+        const book = await Book.create(bookData)
         res.status(201).json({
             message: "A book create successfully",
-            //   data: books,
+            data: book,
         });
     } catch (error) {
         console.error("Error creating book:", error);
@@ -65,11 +74,23 @@ bookRoutes.patch("/update/:bookID", async (req: Request, res: Response, next: Ne
     }
 })
 // Delete a Book
-bookRoutes.get("/delete/:bookID", async (req: Request, res: Response, next: NextFunction) => {
+bookRoutes.delete("/delete/:bookID", async (req: Request, res: Response, next: NextFunction) => {
     try {
-        res.status(201).json({
+
+        const bookID = req.params.bookID
+
+        const book = await Book.findByIdAndDelete(bookID)
+
+        if (!book) {
+            return res.status(404).json({
+                message: "Book not found",
+            });
+        }
+
+
+        res.status(200).json({
             message: "A book deleted successfully",
-            //   data: books,
+            data: book
         });
     } catch (error) {
         console.error("Error deleting book:", error);
