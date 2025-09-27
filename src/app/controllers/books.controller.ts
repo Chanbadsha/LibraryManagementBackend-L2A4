@@ -61,9 +61,15 @@ bookRoutes.post("/create", async (req: Request, res: Response, next: NextFunctio
 // Update a book
 bookRoutes.patch("/update/:bookID", async (req: Request, res: Response, next: NextFunction) => {
     try {
-        res.status(201).json({
+        const updateBookId = req.params.bookID
+        const updateDoc = req.body
+        const updateBook = await Book.findByIdAndUpdate(updateBookId, updateDoc, { new: true, runValidators: true })
+        if (!updateBook) {
+            return res.status(404).json({ message: "Book not found" });
+        }
+        res.status(200).json({
             message: "A book update successfully",
-            //   data: books,
+            data: updateBook,
         });
     } catch (error) {
         console.error("Error updating book:", error);
