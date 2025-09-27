@@ -1,6 +1,7 @@
 import express, { NextFunction, Request, Response } from 'express'
 import cors from 'cors'
 import { bookRoutes } from './app/controllers/books.controller'
+import { borrowBooks } from './app/controllers/borrow.controller'
 const app = express()
 
 // Middleware
@@ -10,6 +11,7 @@ app.use(cors())
 
 // Routing
 app.use("/books", bookRoutes)
+app.use("/borrows", borrowBooks)
 
 // Default Route
 
@@ -31,5 +33,15 @@ app.get("/", (req: Request, res: Response, next: NextFunction) => {
         });
     }
 });
+
+app.use((err: any, req: Request, res: Response, next: NextFunction) => {
+    console.error(err)
+
+    res.status(500).json({
+        message: err.name,
+        error: err instanceof Error ? err.message : err
+    })
+})
+
 
 export default app

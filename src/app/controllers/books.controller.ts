@@ -13,11 +13,7 @@ bookRoutes.get("/", async (req: Request, res: Response, next: NextFunction) => {
             data: books,
         });
     } catch (error) {
-        console.error("Error fetching books:", error);
-        res.status(500).json({
-            message: "Failed to fetch books",
-            error: error instanceof Error ? error.message : error,
-        });
+        next(error)
     }
 })
 // Get single book by id
@@ -34,15 +30,11 @@ bookRoutes.get("/:bookID", async (req: Request, res: Response, next: NextFunctio
             data: book,
         });
     } catch (error) {
-        console.error("Error fetching book:", error);
-        res.status(500).json({
-            message: "Failed to fetch book",
-            error: error instanceof Error ? error.message : error,
-        });
+        next(error)
     }
 })
 // Create a book
-bookRoutes.post("/create", async (req: Request, res: Response, next: NextFunction) => {
+bookRoutes.post("/", async (req: Request, res: Response, next: NextFunction) => {
     try {
         const bookData = req.body
         const book = await Book.create(bookData)
@@ -51,15 +43,12 @@ bookRoutes.post("/create", async (req: Request, res: Response, next: NextFunctio
             data: book,
         });
     } catch (error) {
-        console.error("Error creating book:", error);
-        res.status(500).json({
-            message: "Failed to create book",
-            error: error instanceof Error ? error.message : error,
-        });
+
+        next(error)
     }
 })
 // Update a book
-bookRoutes.patch("/update/:bookID", async (req: Request, res: Response, next: NextFunction) => {
+bookRoutes.patch("/:bookID", async (req: Request, res: Response, next: NextFunction) => {
     try {
         const updateBookId = req.params.bookID
         const updateDoc = req.body
@@ -72,15 +61,11 @@ bookRoutes.patch("/update/:bookID", async (req: Request, res: Response, next: Ne
             data: updateBook,
         });
     } catch (error) {
-        console.error("Error updating book:", error);
-        res.status(500).json({
-            message: "Failed to update book",
-            error: error instanceof Error ? error.message : error,
-        });
+        next(error)
     }
 })
 // Delete a Book
-bookRoutes.delete("/delete/:bookID", async (req: Request, res: Response, next: NextFunction) => {
+bookRoutes.delete("/:bookID", async (req: Request, res: Response, next: NextFunction) => {
     try {
 
         const bookID = req.params.bookID
@@ -99,11 +84,7 @@ bookRoutes.delete("/delete/:bookID", async (req: Request, res: Response, next: N
             data: book
         });
     } catch (error) {
-        console.error("Error deleting book:", error);
-        res.status(500).json({
-            message: "Failed to delete book",
-            error: error instanceof Error ? error.message : error,
-        });
+        next(error)
     }
 })
 
