@@ -21,6 +21,9 @@ const borrowSchema = new Schema<IBorrow>({
         type: Schema.Types.ObjectId,
         ref: "Book"
     }
+}, {
+    versionKey: false,
+    timestamps: true
 })
 
 
